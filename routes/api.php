@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\API\CustomerController;
+use App\Http\Controllers\Auth\CustomerAuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +19,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/customers',[CustomerController::class,'getCustomers']);
+
+Route::post('customers/login',[CustomerAuthController::class, 'login']);
+Route::post('customers/logout',[CustomerAuthController::class,'logout']);
