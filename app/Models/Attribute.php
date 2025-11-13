@@ -10,6 +10,11 @@ class Attribute extends Model
     use HasFactory;
     
     protected $fillable = [
-        'category_id','name','description','type','timestamp'
+        'name','description','type'
     ];
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class,'category_attribute');
+    }
 }

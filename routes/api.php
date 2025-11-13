@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\API\AttributeController;
 use App\Http\Controllers\API\BrandController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\CustomerController;
+use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\Auth\CustomerAuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -38,3 +40,13 @@ Route::get('brands/{id}',[BrandController::class,'getBrandById']);
 Route::post('brands',[BrandController::class,'createBrand']);
 Route::post('brands/{id}',[BrandController::class,'updateBrand']);
 Route::delete('brands/{id}',[BrandController::class,'deleteBrand']);
+
+
+Route::get('attributes',[AttributeController::class,'getAttributes']);
+Route::post('attributes',[AttributeController::class,'createAttribute']);
+Route::post('attributes/{id}',[AttributeController::class,'updateAttribute']);
+Route::delete('attributes/{id}',[AttributeController::class,'deleteAttribute']);
+
+Route::get('products',[ProductController::class,'getProducts']);
+Route::get('products/{id}',[ProductController::class,'getProductById']);
+Route::post('products',[ProductController::class,'createProduct']);
