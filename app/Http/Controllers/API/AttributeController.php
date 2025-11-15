@@ -36,4 +36,9 @@ class AttributeController extends Controller
     {
         return $this->attributeRepo->deleteAttribute($id);
     }
+
+    public function attributeByCategoryId($id)
+    {
+        return $this->attributeRepo->attributeByCategoryId($id);
+    }
 }

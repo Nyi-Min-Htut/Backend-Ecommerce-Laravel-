@@ -13,4 +13,6 @@ interface AttributeRepositoryInterface
     public function updateAttribute($id, array $data);
 
     public function deleteAttribute($id);
+
+    public function attributeByCategoryId(int $id);
 }

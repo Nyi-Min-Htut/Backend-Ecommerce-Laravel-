@@ -3,6 +3,7 @@
 namespace App\Repositories\Attribute;
 
 use App\Models\Attribute;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class AttributeRepository implements AttributeRepositoryInterface
@@ -56,5 +57,14 @@ class AttributeRepository implements AttributeRepositoryInterface
                 200
             );
         }
+    }
+
+    public function attributeByCategoryId(int $id)
+    {
+        $category = Category::find($id);
+        return response()->json([
+            'success'=>true,
+            'data'=> $category->attributes
+        ]);
     }
 }

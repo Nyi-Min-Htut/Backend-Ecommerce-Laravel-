@@ -46,7 +46,9 @@ Route::get('attributes',[AttributeController::class,'getAttributes']);
 Route::post('attributes',[AttributeController::class,'createAttribute']);
 Route::post('attributes/{id}',[AttributeController::class,'updateAttribute']);
 Route::delete('attributes/{id}',[AttributeController::class,'deleteAttribute']);
+Route::get('categories/{id}/attributes',[AttributeController::class,'attributeByCategoryId']);
 
 Route::get('products',[ProductController::class,'getProducts']);
 Route::get('products/{id}',[ProductController::class,'getProductById']);
 Route::post('products',[ProductController::class,'createProduct']);
+Route::post('products/{id}/variants',[ProductController::class,'createProductVariant']);
