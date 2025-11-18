@@ -51,4 +51,4 @@ Route::get('categories/{id}/attributes',[AttributeController::class,'attributeBy
 Route::get('products',[ProductController::class,'getProducts']);
 Route::get('products/{id}',[ProductController::class,'getProductById']);
 Route::post('products',[ProductController::class,'createProduct']);
-Route::post('products/{id}/variants',[ProductController::class,'createProductVariant']);
+Route::post('products/{id}/variants',[ProductController::class,'createProductVariants']);

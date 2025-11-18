@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Repositories\Product\ProductRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -31,11 +32,13 @@ class ProductController extends Controller
         return $this->productRepo->createProduct($data);
     }
 
-    public function createProductVariant(Request $request, int $productId)
-    {
-        $data = $request->all();
-        return $this->productRepo->createProductVariant($data, $productId);
-    }
+public function createProductVariants(Request $request, int $productId)
+{
+    $data = $request->all();
+    return $variants = $this->productRepo->createProductVariant($data, $productId);
+}
+
+
 
     public function updateProduct(Request $request, $id)
     {
@@ -47,6 +50,4 @@ class ProductController extends Controller
     {
         return $this->productRepo->deleteProduct($id);
     }
-
-
 }

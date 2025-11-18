@@ -20,6 +20,6 @@ class Attribute extends Model
 
     public function productVariants()
     {
-        return $this->belongsToMany(ProductVariant::class,'attribute_product_variant');
+        return $this->belongsToMany(ProductVariant::class,'product_variant_attribute')->withPivot('value');
     }
 }

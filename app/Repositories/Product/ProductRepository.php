@@ -24,7 +24,7 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function getProductById($id)
     {
-        $product = Product::with(['category', 'brand', 'productImages'])->find($id);
+        $product = Product::with(['category', 'brand', 'productImages', 'productVariants.productImages', 'productVariants.attributes'])->find($id);
         return response()->json([
             'success' => true,
             'data' => $product,
@@ -65,22 +65,30 @@ class ProductRepository implements ProductRepositoryInterface
     public function createProductVariant(array $data, int $productId)
     {
         DB::beginTransaction();
+
         try {
+
             $variant = ProductVariant::create([
                 'product_id' => $productId,
                 'name' => $data['name'],
-                'price' => $data['price'],
+                'price' => $data['price'] ?? null,
                 'stock' => $data['stock'],
                 'description' => $data['description'] ?? null,
             ]);
 
-            if (isset($data['attributes']) && is_array($data['attributes'])) {
-                foreach ($data['attributes'] as $attrId => $value) {
+            $product = Product::find($productId);
+            $product->stock
+            $attributes = isset($data['attributes']) ? json_decode($data['attributes'], true) : [];
+
+            if (!empty($attributes)) {
+
+                foreach ($attributes as $attrId => $value) {
                     $variant->attributes()->attach($attrId, ['value' => $value]);
                 }
             }
 
-            if (isset($data['images']) && is_array($data['images'])) {
+
+            if (!empty($data['images']) && is_array($data['images'])) {
                 foreach ($data['images'] as $image) {
                     $path = $image->store('products', 'public');
                     $url = asset('storage/' . $path);
@@ -107,6 +115,7 @@ class ProductRepository implements ProductRepositoryInterface
             ], 500);
         }
     }
+
 
     public function updateProduct(array $data, $id)
     {
