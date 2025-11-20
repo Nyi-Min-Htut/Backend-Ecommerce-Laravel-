@@ -8,6 +8,8 @@ interface AttributeRepositoryInterface
 {
     public function getAttributes(Request $request);
 
+    public function getAttributeById($id);
+
     public function createAttribute(array $data);
 
     public function updateAttribute($id, array $data);

@@ -4,7 +4,9 @@ use App\Http\Controllers\API\AttributeController;
 use App\Http\Controllers\API\BrandController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\CustomerController;
+use App\Http\Controllers\API\EmployeeController;
 use App\Http\Controllers\API\ProductController;
+use App\Http\Controllers\API\RoleController;
 use App\Http\Controllers\Auth\CustomerAuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -43,6 +45,7 @@ Route::delete('brands/{id}',[BrandController::class,'deleteBrand']);
 
 
 Route::get('attributes',[AttributeController::class,'getAttributes']);
+Route::get('attributes/{id}',[AttributeController::class,'getAttributeById']);
 Route::post('attributes',[AttributeController::class,'createAttribute']);
 Route::post('attributes/{id}',[AttributeController::class,'updateAttribute']);
 Route::delete('attributes/{id}',[AttributeController::class,'deleteAttribute']);
@@ -50,5 +53,26 @@ Route::get('categories/{id}/attributes',[AttributeController::class,'attributeBy
 
 Route::get('products',[ProductController::class,'getProducts']);
 Route::get('products/{id}',[ProductController::class,'getProductById']);
+Route::post('products/{id}',[ProductController::class,'updateProduct']);
 Route::post('products',[ProductController::class,'createProduct']);
 Route::post('products/{id}/variants',[ProductController::class,'createProductVariants']);
+Route::get('products/variants/{id}',[ProductController::class,'getVariantById']);
+Route::delete('products/variants/{id}',[ProductController::class,'deleteVariant']);
+Route::delete('products/images/{id}',[ProductController::class,'deleteProductImage']);
+
+Route::get('roles',[RoleController::class,'getRoles']);
+Route::get('roles/{id}',[RoleController::class,'getRoleById']);
+Route::post('roles',[RoleController::class,'createRole']);
+Route::post('roles/{id}',[RoleController::class,'updateRole']);
+Route::delete('roles/{id}',[RoleController::class,'deleteRole']);
+
+Route::get('employees',[EmployeeController::class,'getEmployees']);
+Route::get('employees/{id}',[EmployeeController::class,'getEmployeeById']);
+// Route::post('employees/login',[EmployeeController::class,'login']);
+// Route::post('employees/logout',[EmployeeController::class,'logout']);
+Route::post('employees',[EmployeeController::class,'createEmployee']);
+Route::post('employees/{id}',[EmployeeController::class,'updateEmployee']);
+Route::delete('employees/{id}',[EmployeeController::class,'deleteEmployee']);
+Route::post('employees/{id}/ban',[EmployeeController::class,'toggleBan']);
+Route::post('employees/{id}/verify',[EmployeeController::class,'toggleVerify']);
+

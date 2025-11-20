@@ -20,6 +20,11 @@ class AttributeController extends Controller
         return $this->attributeRepo->getAttributes($request);
     }
 
+    public function getAttributeById($id)
+    {
+        return $this->attributeRepo->getAttributeById($id);
+    }
+
     public function createAttribute(Request $request)
     {
         $data = $request->all();

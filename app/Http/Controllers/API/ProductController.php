@@ -32,13 +32,26 @@ class ProductController extends Controller
         return $this->productRepo->createProduct($data);
     }
 
-public function createProductVariants(Request $request, int $productId)
-{
-    $data = $request->all();
-    return $variants = $this->productRepo->createProductVariant($data, $productId);
-}
+    public function createProductVariants(Request $request, int $productId)
+    {
+        $data = $request->all();
+        return $variants = $this->productRepo->createProductVariant($data, $productId);
+    }
 
+    public function getVariantById($id)
+    {
+        return $this->productRepo->getVariantById($id);
+    }
 
+    public function deleteVariant($id)
+    {
+        return $this->productRepo->deleteVariant($id);
+    }
+
+    public function deleteProductImage($id)
+    {
+        return $this->productRepo->deleteProductImage($id);
+    }
 
     public function updateProduct(Request $request, $id)
     {

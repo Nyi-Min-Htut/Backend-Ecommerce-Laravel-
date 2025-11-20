@@ -10,7 +10,7 @@ class CategoryRepository implements CategoryRepositoryInterface
 {
     public function getCategories(Request $request)
     {
-        $categories = Category::latest()->paginate(config('app.per_page'));
+        $categories = Category::with('attributes')->latest()->paginate(config('app.per_page'));
         return response()->json(
             [
                 'success' => true,
@@ -22,15 +22,21 @@ class CategoryRepository implements CategoryRepositoryInterface
 
     public function getCategoryById($id)
     {
-        $category = Category::find($id);
-        return response()->json(
-            [
-                'success' => true,
-                'data' => $category,
-            ],
-            200
-        );
+        $category = Category::with('attributes')->find($id);
+
+        if (!$category) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Category not found',
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $category,
+        ], 200);
     }
+
 
     public function createCategory(array $data)
     {
@@ -60,20 +66,42 @@ class CategoryRepository implements CategoryRepositoryInterface
         }
     }
 
-    public function updateCategory(array $data, $id)
-    {
-        $category = Category::find($id);
-        if ($category) {
-            $category->update($data);
-            return response()->json(
-                [
-                    'success' => true,
-                    'data' => $category,
-                ],
-                200
-            );
-        }
+public function updateCategory(array $data, $id)
+{
+    $category = Category::find($id);
+    
+    if (!$category) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Category not found'
+        ], 404);
     }
+
+    // Update category basic info
+    $category->update([
+        'name' => $data['name'],
+        'description' => $data['description']
+    ]);
+
+    // Handle attributes
+    if (isset($data['attribute_ids'])) {
+        $attributeIds = json_decode($data['attribute_ids']);
+        
+        // Sync all attributes at once (removes old ones and adds new ones)
+        $category->attributes()->sync($attributeIds);
+    } else {
+        // If no attributes are provided, remove all existing attributes
+        $category->attributes()->detach();
+    }
+
+    // Load the updated category with attributes
+    $category->load('attributes');
+
+    return response()->json([
+        'success' => true,
+        'data' => $category,
+    ], 200);
+}
 
     public function deleteCategory($id)
     {

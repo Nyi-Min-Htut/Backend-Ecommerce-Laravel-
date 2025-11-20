@@ -20,6 +20,15 @@ class AttributeRepository implements AttributeRepositoryInterface
         );
     }
 
+    public function getAttributeById($id)
+    {
+        $attribute = Attribute::with('categories')->find($id);
+        return response()->json([
+            'success' => true,
+            'data' => $attribute,
+        ], 200);
+    }
+
     public function createAttribute(array $data)
     {
         $attribute = Attribute::create($data);
