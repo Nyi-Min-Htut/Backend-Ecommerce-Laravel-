@@ -24,8 +24,8 @@ return new class extends Migration
             $table->string('gender');
             $table->string('image_url')->nullable();
             $table->string('image_path')->nullable();
-            $table->boolean('is_verified');
-            $table->boolean('is_ban');
+            $table->boolean('is_verified')->default(true);
+            $table->boolean('is_ban')->default(false);
             $table->timestamps();
         });
     }

@@ -21,4 +21,10 @@ class CustomerController extends Controller
         $customers = $this->cRepo->getCustomers($request);
         return $customers;
     }
+
+    public function registerCustomer(Request $request)
+    {
+        return $this->cRepo->registerCustomer($request);
+       
+    }
 }

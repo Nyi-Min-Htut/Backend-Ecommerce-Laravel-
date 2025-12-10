@@ -49,6 +49,17 @@ class CategoryRepository implements CategoryRepositoryInterface
                     $category->attributes()->attach($attr);
                 }
             }
+
+            if($data['image'])
+            {
+                $path = $data['image']->store('category','public');
+                $url = asset('storage/'.$path);
+            }
+
+            $category->image_url = $url;
+            $category->image_path = $path;
+
+            $category->save();
             DB::commit();
             return response()->json(
                 [
@@ -69,7 +80,14 @@ class CategoryRepository implements CategoryRepositoryInterface
 public function updateCategory(array $data, $id)
 {
     $category = Category::find($id);
-    
+    if($data['image'])
+    {
+        $path = $data['image']->store('category','public');
+        $url = asset('storage/'.$path);
+        $category->image_url = $url;
+        $category->image_path = $path;
+        $category->save();
+    }
     if (!$category) {
         return response()->json([
             'success' => false,

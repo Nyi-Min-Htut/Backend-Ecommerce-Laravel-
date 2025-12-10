@@ -2,13 +2,16 @@
 
 namespace App\Models;
 
+
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens; 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 
-class Employee extends Model
+class Employee extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, HasApiTokens, Notifiable;
 
     protected $fillable=[
         'name','email','role_id','phone_number','dob','password','address','remark','gender','remark','image_url','image_path','is_verified','is_ban'

@@ -5,9 +5,12 @@ use App\Http\Controllers\API\BrandController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\CustomerController;
 use App\Http\Controllers\API\EmployeeController;
+use App\Http\Controllers\API\OrderController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\RoleController;
 use App\Http\Controllers\Auth\CustomerAuthController;
+use App\Http\Controllers\Auth\EmployeeAuthController;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +33,8 @@ Route::get('/customers',[CustomerController::class,'getCustomers']);
 
 Route::post('customers/login',[CustomerAuthController::class, 'login']);
 Route::post('customers/logout',[CustomerAuthController::class,'logout']);
+
+Route::post('customers',[CustomerController::class,'registerCustomer']);
 
 Route::get('categories',[CategoryController::class,'getCategories']);
 Route::get('categories/{id}',[CategoryController::class,'getCategoryById']);
@@ -75,4 +80,9 @@ Route::post('employees/{id}',[EmployeeController::class,'updateEmployee']);
 Route::delete('employees/{id}',[EmployeeController::class,'deleteEmployee']);
 Route::post('employees/{id}/ban',[EmployeeController::class,'toggleBan']);
 Route::post('employees/{id}/verify',[EmployeeController::class,'toggleVerify']);
+Route::post('employee/login',[EmployeeAuthController::class,'login']);
+Route::post('employee/logout',[EmployeeAuthController::class,'logout']);
+
+Route::get('orders',[OrderController::class,'getOrders']);
+Route::post('orders',[OrderController::class,'createOrder']);
 

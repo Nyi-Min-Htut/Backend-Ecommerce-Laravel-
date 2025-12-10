@@ -7,4 +7,6 @@ use Illuminate\Http\Request;
 interface CustomerRepositoryInterface
 {
     public function getCustomers(Request $request);
+
+    public function registerCustomer(Request $request);
 }

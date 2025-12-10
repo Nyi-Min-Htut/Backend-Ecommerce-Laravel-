@@ -3,18 +3,17 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\Customer;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-class CustomerAuthController extends Controller
+class EmployeeAuthController extends Controller
 {
     public function login(Request $request)
     {
-        // Validate input
         $validator = Validator::make($request->all(), [
-            'phone_number' => 'required|string',
+            'email' => 'required|email',
             'password' => 'required|string'
         ]);
 
@@ -26,27 +25,24 @@ class CustomerAuthController extends Controller
             ], 422);
         }
 
-        $customer = Customer::where('phone_number', $request->phone_number)->first();
+        $employee = Employee::where('email', $request->email)->first();
         
-        if (!$customer || !Hash::check($request->password, $customer->password)) {
+        if (!$employee || !Hash::check($request->password, $employee->password)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid credentials'
             ], 401);
         }
 
-        // Delete existing tokens
-        $customer->tokens()->delete();
-
-        // Create new token
-        $token = $customer->createToken('customer_token')->plainTextToken;
+        $employee->tokens()->delete();
+        $token = $employee->createToken('employee_token')->plainTextToken;
         
         return response()->json([
             'success' => true,
             'message' => 'Login successful',
             'token' => $token,
             'token_type' => 'Bearer',
-            'customer' => $customer
+            'employee' => $employee
         ], 200);
     }
 
@@ -56,14 +52,6 @@ class CustomerAuthController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Logged out successfully'
-        ]);
-    }
-
-    public function profile(Request $request)
-    {
-        return response()->json([
-            'success' => true,
-            'customer' => $request->user()
         ]);
     }
 }
