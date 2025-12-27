@@ -10,41 +10,36 @@ use Illuminate\Support\Facades\Validator;
 
 class EmployeeAuthController extends Controller
 {
-    public function login(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'password' => 'required|string'
-        ]);
+public function login(Request $request)
+{
+    $request->validate([
+        'phone_number' => 'required',
+        'password'     => 'required',
+    ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation error',
-                'errors' => $validator->errors()
-            ], 422);
-        }
+    $employee = Employee::where('phone_number', $request->phone_number)->first();
 
-        $employee = Employee::where('email', $request->email)->first();
-        
-        if (!$employee || !Hash::check($request->password, $employee->password)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Invalid credentials'
-            ], 401);
-        }
-
-        $employee->tokens()->delete();
-        $token = $employee->createToken('employee_token')->plainTextToken;
-        
+    if (!$employee || !Hash::check($request->password, $employee->password)) {
         return response()->json([
-            'success' => true,
-            'message' => 'Login successful',
-            'token' => $token,
-            'token_type' => 'Bearer',
-            'employee' => $employee
-        ], 200);
+            'success' => false,
+            'message' => 'Invalid credentials',
+        ], 401);
     }
+
+    // Optional: single-device login
+    $employee->tokens()->delete();
+
+    $token = $employee->createToken('employee_token')->plainTextToken;
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Login successful',
+        'token' => $token,
+        'token_type' => 'Bearer',
+        'employee' =>$employee
+    ], 200);
+}
+
 
     public function logout(Request $request)
     {

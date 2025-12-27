@@ -5,8 +5,10 @@ namespace App\Repositories\Customer;
 use App\Models\Customer;
 use Dotenv\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class CustomerRepository implements CustomerRepositoryInterface
 {
@@ -77,4 +79,90 @@ public function registerCustomer(Request $request)
         ], 500);
     }
 }
+
+public function getProfile()
+    {
+        try {
+            $customer = Auth::guard('customer')->user();
+            
+            if (!$customer) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Customer not found'
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => $customer
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to fetch profile: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function updateProfile(Request $request)
+    {
+        try {
+            $customer = Auth::guard('customer')->user();
+            
+            if (!$customer) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Customer not found'
+                ], 404);
+            }
+
+            $validatedData = $request->validate([
+                'name' => 'sometimes|string|max:255',
+                'email' => 'sometimes|email|unique:customers,email,' . $customer->id,
+                'phone_number' => 'sometimes|string|max:20',
+                'date_of_birth' => 'sometimes|date',
+                'address' => 'sometimes|string',
+                'gender' => 'sometimes|in:male,female,other',
+                'remark' => 'sometimes|string',
+                'nrc' => 'sometimes|string|max:50',
+                'password' => 'sometimes|string|min:6',
+                'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048'
+            ]);
+
+            // Handle image upload
+            if ($request->hasFile('image')) {
+                // Delete old image if exists
+                if ($customer->image_path && Storage::exists($customer->image_path)) {
+                    Storage::delete($customer->image_path);
+                }
+
+                $path = $request->file('image')->store('customers','public');
+                $url = asset('storage/'.$path);
+                
+                $validatedData['image_url'] = $url;
+                $validatedData['image_path'] = $path;
+            }
+
+            // Handle password update
+            if (isset($validatedData['password'])) {
+                $validatedData['password'] = Hash::make($validatedData['password']);
+            }
+
+            // Update customer
+            $customer->update($validatedData);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Profile updated successfully',
+                'data' => $customer->fresh()
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update profile: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    
 }

@@ -27,4 +27,14 @@ class CustomerController extends Controller
         return $this->cRepo->registerCustomer($request);
        
     }
+
+    public function getProfile()
+    {
+        return $this->cRepo->getProfile();
+    }
+
+    public function updateProfile(Request $request)
+    {
+        return $this->cRepo->updateProfile($request);
+    }
 }

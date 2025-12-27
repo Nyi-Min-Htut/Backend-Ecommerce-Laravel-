@@ -20,6 +20,11 @@ class OrderController extends Controller
         return $this->orderRepository->getOrders($request);
     }
 
+    public function getOrderByUser()
+    {
+        return $this->orderRepository->getOrderByUserID();
+    }
+
     public function createOrder(Request $request)
     {
         return $this->orderRepository->createOrder($request);

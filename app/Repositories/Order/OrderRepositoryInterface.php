@@ -8,5 +8,7 @@ interface OrderRepositoryInterface
 {
     public function getOrders(Request $request);
 
+    public function getOrderByUserID();
+
     public function createOrder(Request $request);
 }

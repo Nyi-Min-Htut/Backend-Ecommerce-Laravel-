@@ -10,29 +10,32 @@ use Illuminate\Support\Facades\DB;
 
 class ProductRepository implements ProductRepositoryInterface
 {
-    public function getProducts(Request $request)
-    {
-        $query = Product::with('category', 'brand', 'productImages')
-            ->orderBy('created_at', 'desc');
+public function getProducts(Request $request)
+{
+    $query = Product::with(['category', 'brand', 'productImages', 'productVariants'])
+        ->orderBy('created_at', 'desc');
 
-        // Apply category filter if it exists
-        if ($request->category_id) {
-            $query->where('category_id', $request->category_id);
-        }
-
-        // Apply search filter if it exists
-        if ($request->search) {
-            $query->where('name', 'like', '%' . $request->search . '%'); // assuming you want to search by product name
-        }
-
-        // Paginate the results
-        $products = $query->paginate(config('app.per_page'));
-
-        return response()->json([
-            'success' => true,
-            'data' => $products,
-        ], 200);
+    if ($request->category_id) {
+        $query->where('category_id', $request->category_id);
     }
+
+    if ($request->search) {
+        $query->where('name', 'like', '%' . $request->search . '%');
+    }
+
+    // Paginate the results
+    $products = $query->paginate(config('app.per_page'));
+
+    // Add total_stock to each product using sum() method
+    $products->getCollection()->each(function ($product) {
+        $product->total_stock = $product->productVariants->sum('stock');
+    });
+
+    return response()->json([
+        'success' => true,
+        'data' => $products,
+    ], 200);
+}
 
 
     public function getProductById($id)

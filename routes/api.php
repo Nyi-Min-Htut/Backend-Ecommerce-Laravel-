@@ -29,6 +29,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
 Route::get('/customers',[CustomerController::class,'getCustomers']);
 
 Route::post('customers/login',[CustomerAuthController::class, 'login']);
@@ -73,8 +74,8 @@ Route::delete('roles/{id}',[RoleController::class,'deleteRole']);
 
 Route::get('employees',[EmployeeController::class,'getEmployees']);
 Route::get('employees/{id}',[EmployeeController::class,'getEmployeeById']);
-// Route::post('employees/login',[EmployeeController::class,'login']);
-// Route::post('employees/logout',[EmployeeController::class,'logout']);
+Route::post('employees/login',[EmployeeController::class,'login']);
+Route::post('employees/logout',[EmployeeController::class,'logout']);
 Route::post('employees',[EmployeeController::class,'createEmployee']);
 Route::post('employees/{id}',[EmployeeController::class,'updateEmployee']);
 Route::delete('employees/{id}',[EmployeeController::class,'deleteEmployee']);
@@ -83,6 +84,18 @@ Route::post('employees/{id}/verify',[EmployeeController::class,'toggleVerify']);
 Route::post('employee/login',[EmployeeAuthController::class,'login']);
 Route::post('employee/logout',[EmployeeAuthController::class,'logout']);
 
-Route::get('orders',[OrderController::class,'getOrders']);
-Route::post('orders',[OrderController::class,'createOrder']);
+Route::middleware('auth:customer')->group(function () {
+    Route::get('orders',[OrderController::class,'getOrders']);
+    Route::get('orders/customer',[OrderController::class,'getOrderByUser']);
+    Route::post('orders',[OrderController::class,'createOrder']);
+    Route::get('customer/profile', [CustomerController::class, 'getProfile']);
+    Route::post('customer/profile', [CustomerController::class, 'updateProfile']);
+});
+
+Route::middleware('auth:employee')->group(function () {
+    Route::get('/employee/me', function() {
+        return auth('employee')->user();
+    });
+});
+
 
