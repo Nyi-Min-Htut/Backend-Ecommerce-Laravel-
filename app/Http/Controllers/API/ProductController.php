@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Brand;
+use App\Models\Product;
 use App\Repositories\Product\ProductRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -62,5 +64,23 @@ class ProductController extends Controller
     public function deleteProduct($id)
     {
         return $this->productRepo->deleteProduct($id);
+    }
+
+
+    public function test(Request $request)
+    {
+        $brand = Brand::all();
+        $products = Product::when($request->name,function($q,$search){
+            $q->where('name','like','%'.$search.'%');
+        })->get();
+return view('home', ['products' => $products,
+'brands'=>$brand]);
+
+    }
+
+    public function createBrand(Request $request)
+    {
+        $brand = Brand::create($request->all());
+        return redirect()->route('home');
     }
 }

@@ -10,6 +10,7 @@ use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\RoleController;
 use App\Http\Controllers\Auth\CustomerAuthController;
 use App\Http\Controllers\Auth\EmployeeAuthController;
+use App\Http\Controllers\TestController;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -97,5 +98,7 @@ Route::middleware('auth:employee')->group(function () {
         return auth('employee')->user();
     });
 });
+
+Route::get('/test',[TestController::class,'test']);
 
 
