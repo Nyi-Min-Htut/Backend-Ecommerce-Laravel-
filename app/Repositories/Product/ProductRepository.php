@@ -93,7 +93,6 @@ public function getProducts(Request $request)
             ]);
 
             $product = Product::find($productId);
-            $product->stock += $data['stock'];
             $product->save();
             $attributes = isset($data['attributes']) ? json_decode($data['attributes'], true) : [];
 
