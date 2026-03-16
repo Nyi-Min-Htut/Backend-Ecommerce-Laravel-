@@ -88,9 +88,15 @@ Route::post('employee/logout',[EmployeeAuthController::class,'logout']);
 Route::middleware('auth:customer')->group(function () {
     Route::get('orders',[OrderController::class,'getOrders']);
     Route::get('orders/customer',[OrderController::class,'getOrderByUser']);
+    Route::get('order_item_details/{id}',[OrderController::class,'getOrderItemDetail']);
     Route::post('orders',[OrderController::class,'createOrder']);
     Route::get('customer/profile', [CustomerController::class, 'getProfile']);
     Route::post('customer/profile', [CustomerController::class, 'updateProfile']);
+    Route::post('customer/fav-products/{productId}', [ProductController::class, 'customerFavProduct']);
+    Route::post('customer/save-products/{productId}', [ProductController::class, 'customerSaveProduct']);
+    Route::get('customer/fav-products', [CustomerController::class, 'favProductsByCustomer']);
+    Route::get('customer/save-products', [CustomerController::class, 'saveProductsByCustomer']);
+    Route::get('/product_variants/{id}',[ProductController::class,'productVariantById']);
 });
 
 Route::middleware('auth:employee')->group(function () {

@@ -23,4 +23,10 @@ interface ProductRepositoryInterface
     public function updateProduct(array $data, $id);
 
     public function deleteProduct($id);
+
+    public function customerFavProduct(int $productId);
+
+    public function customerSaveProduct(int $productId);
+
+    public function productVariantById(int $productVariantId);
 }

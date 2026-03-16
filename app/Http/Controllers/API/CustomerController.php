@@ -37,4 +37,14 @@ class CustomerController extends Controller
     {
         return $this->cRepo->updateProfile($request);
     }
+
+    public function favProductsByCustomer()
+    {
+        return $this->cRepo->favProductsByCustomer();
+    }
+
+    public function saveProductsByCustomer()
+    {
+        return $this->cRepo->saveProductsByCustomer();
+    }
 }

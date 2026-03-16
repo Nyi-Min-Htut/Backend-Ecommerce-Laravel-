@@ -29,4 +29,9 @@ class OrderController extends Controller
     {
         return $this->orderRepository->createOrder($request);
     }
+
+    public function getOrderItemDetail($orderId)
+    {
+        return $this->orderRepository->getOrderItems($orderId);
+    }
 }

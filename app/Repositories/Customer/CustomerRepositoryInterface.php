@@ -14,4 +14,8 @@ interface CustomerRepositoryInterface
 
     public function updateProfile(Request $request);
 
+    public function favProductsByCustomer();
+
+    public function saveProductsByCustomer();
+
 }

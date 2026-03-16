@@ -15,7 +15,7 @@ class Product extends Model
         'description',
         'price',
     ];
-    
+
     public function category()
     {
         return $this->belongsTo(Category::class);
@@ -34,5 +34,20 @@ class Product extends Model
     public function productVariants()
     {
         return $this->hasMany(ProductVariant::class);
+    }
+
+    public function favCustomer()
+    {
+        return $this->belongsToMany(Customer::class, 'customer_fav_products', 'product_id', 'customer_id')->withTimestamps();
+    }
+
+    public function saveCustomer()
+    {
+        return $this->belongsToMany(Customer::class, 'customer_save_products', 'product_id', 'customer_id')->withTimestamps();
+    }
+
+    public function ratingCustomer()
+    {
+        return $this->belongsToMany(Customer::class,'customer_rating_products','product_id','customer_id')->withTimestamps();
     }
 }

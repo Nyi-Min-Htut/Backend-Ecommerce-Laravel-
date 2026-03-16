@@ -70,12 +70,13 @@ class ProductController extends Controller
     public function test(Request $request)
     {
         $brand = Brand::all();
-        $products = Product::when($request->name,function($q,$search){
-            $q->where('name','like','%'.$search.'%');
+        $products = Product::when($request->name, function ($q, $search) {
+            $q->where('name', 'like', '%' . $search . '%');
         })->get();
-return view('home', ['products' => $products,
-'brands'=>$brand]);
-
+        return view('home', [
+            'products' => $products,
+            'brands' => $brand
+        ]);
     }
 
     public function createBrand(Request $request)
@@ -83,4 +84,21 @@ return view('home', ['products' => $products,
         $brand = Brand::create($request->all());
         return redirect()->route('home');
     }
+
+    public function customerFavProduct(int $productId)
+    {
+        return $this->productRepo->customerFavProduct($productId);
+    }
+
+    public function customerSaveProduct(int $productId)
+    {
+        return $this->productRepo->customerSaveProduct($productId);
+    }
+
+    public function productVariantById(int $productVariantId)
+    {
+        return $this->productRepo->productVariantById($productVariantId);
+    }
+
+    
 }

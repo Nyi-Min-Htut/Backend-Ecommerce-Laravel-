@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class OrderRepository implements OrderRepositoryInterface
@@ -108,4 +109,18 @@ class OrderRepository implements OrderRepositoryInterface
             ], 500);
         }
     }
+
+
+public function getOrderItems($order_item_id)
+{
+    $customer = Auth::guard('customer')->user();
+
+    $orderItem = OrderItem::where('id',$order_item_id)->with('productVariant.productImages')->get();
+    return response()->json([
+        'success' => true,
+        'data'=>$orderItem
+    ], 200);
+}
+
+
 }

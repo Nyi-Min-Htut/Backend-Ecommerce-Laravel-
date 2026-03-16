@@ -11,4 +11,7 @@ interface OrderRepositoryInterface
     public function getOrderByUserID();
 
     public function createOrder(Request $request);
+
+     public function getOrderItems($order_item_id);
+
 }

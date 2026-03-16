@@ -200,4 +200,93 @@ public function getProducts(Request $request)
     {
         // Implementation code here
     }
+
+    public function customerFavProduct(int $productId)
+    {
+        $userId = auth()->guard('customer')->user()->id;
+        $product = Product::find($productId);
+        if (!$product) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Product not found.',
+            ], 404);
+        }else{
+            $isFav = $product->favCustomer()->where('customer_id', $userId)->exists();
+
+            if ($isFav) {
+                $product->favCustomer()->detach($userId);
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Product removed from favorites.',
+                ], 200);
+            } else {
+                $product->favCustomer()->attach($userId);
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Product added to favorites.',
+                ], 200);
+            }
+        }
+    }
+
+    public function customerSaveProduct(int $productId)
+    {
+        $userId = auth()->guard('customer')->user()->id;
+        $product = Product::find($productId);
+        if (!$product) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Product not found.',
+            ], 404);
+        }else{
+            $isSaved = $product->saveCustomer()->where('customer_id', $userId)->exists();
+
+            if ($isSaved) {
+                $product->saveCustomer()->detach($userId);
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Product removed from saved products.',
+                ], 200);
+            } else {
+                $product->saveCustomer()->attach($userId);
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Product added to saved products.',
+                ], 200);
+            }
+        }
+    }
+
+    // public function customerRatingProduct(array $data)
+    // {
+    //     $userId = auth()->guard('customer')->user()->id;
+    //     $product = Product::find($data['product_id']);
+    //     if(!$product)
+    //         {
+    //             return response()->json([
+    //                 'success' => false,
+    //                 'message' => "Product not found",
+    //             ],404);
+    //         }else{
+    //             $isRating = $product->ratingCustomer()->where('customer_id',$userId)->exists();
+    //             if($isRating)
+    //                 {
+    //                     return response()->json([
+    //                         'success' => true,
+    //                         'message' => 'Product that you rated is already rated by you',
+    //                     ],200);
+    //                 }else{
+    //                     $product->ratingCustomer()->attach($data)
+    //                 }
+    //         }
+    // }
+
+    public function productVariantById(int $productVariantId)
+    {
+        $productVariant = ProductVariant::where('id',$productVariantId)->with(['product','productImages','attributes'])->get();
+        return response()->json([
+            'success'=> true,
+            'data'=>$productVariant
+        ]);
+    }
 }

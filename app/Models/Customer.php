@@ -32,6 +32,20 @@ class Customer extends Authenticatable
         $this->hasMany(Order::class);
     }
 
+    public function favProducts()
+    {
+        return $this->belongsToMany(Product::class, 'customer_fav_products', 'customer_id', 'product_id')->withTimestamps();
+    }
+
+    public function saveProducts()
+    {
+        return $this->belongsToMany(Product::class, 'customer_save_products', 'customer_id', 'product_id')->withTimestamps();
+    }
+
+    public function ratingProducts()
+    {
+        return $this->belongsToMany(Product::class,'customer_rating_products','customer_id','product_id')->withTimestamps();
+    }
 
 
 }
